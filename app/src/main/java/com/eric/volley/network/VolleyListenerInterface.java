@@ -13,7 +13,8 @@ public abstract class VolleyListenerInterface {
     public static Response.Listener<String> mListener;
     public static Response.ErrorListener mErrorListener;
 
-    public VolleyListenerInterface(Context context, Response.Listener<String> listener, Response.ErrorListener errorListener) {
+    public VolleyListenerInterface(Context context, Response.Listener<String> listener,
+                                   Response.ErrorListener errorListener) {
         this.mContext = context;
         this.mErrorListener = errorListener;
         this.mListener = listener;
@@ -43,7 +44,8 @@ public abstract class VolleyListenerInterface {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 onMyError(volleyError);
-                Toast.makeText(mContext, mContext.getString(R.string.toast_networkError), Toast.LENGTH_LONG).show();
+                Toast.makeText(mContext,
+                        mContext.getString(R.string.toast_networkError), Toast.LENGTH_LONG).show();
             }
         };
         return mErrorListener;
