@@ -14,7 +14,7 @@ public class VolleyRequestUtil {
 
     public static StringRequest stringRequest;
     public static Context context;
-    public static int timeOut = 5000;
+    public static int sTimeOut = 30000;
 
     /**
      * 获取GET请求内容
@@ -36,10 +36,8 @@ public class VolleyRequestUtil {
         // 为当前请求添加标记
         stringRequest.setTag(tag);
         // 默认超时时间以及重连次数
-        if (timeOutDefaultFlg) {
-            timeOut = DefaultRetryPolicy.DEFAULT_TIMEOUT_MS;
-        }
-        stringRequest.setRetryPolicy(new DefaultRetryPolicy(timeOut,
+        int myTimeOut = timeOutDefaultFlg ? DefaultRetryPolicy.DEFAULT_TIMEOUT_MS : sTimeOut;
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(myTimeOut,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         // 将当前请求添加到请求队列中
         MyApplication.getQueue().add(stringRequest);
