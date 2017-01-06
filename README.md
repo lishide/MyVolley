@@ -110,7 +110,8 @@ Volley提供了`JsonObjectRequest`、`JsonArrayRequest`、`StringRequest`等Requ
 **用GET方式请求网络资源：**
 
         VolleyRequestUtil.RequestGet(this, url, "tag", 
-            new VolleyListenerInterface(this, VolleyListenerInterface.mListener, VolleyListenerInterface.mErrorListener) {
+            new VolleyListenerInterface(this, VolleyListenerInterface.mListener,
+ 					VolleyListenerInterface.mErrorListener) {
             // Volley请求成功时调用的函数
             @Override
             public void onMySuccess(String result) {
@@ -127,7 +128,8 @@ Volley提供了`JsonObjectRequest`、`JsonArrayRequest`、`StringRequest`等Requ
 **用POST方式请求网络资源：**
 
         VolleyRequestUtil.RequestPOST(this, url, "tag", 
-            new VolleyListenerInterface(this, VolleyListenerInterface.mListener, VolleyListenerInterface.mErrorListener) {
+            new VolleyListenerInterface(this, VolleyListenerInterface.mListener,
+					VolleyListenerInterface.mErrorListener) {
             // Volley请求成功时调用的函数
             @Override
             public void onMySuccess(String result) {
