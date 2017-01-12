@@ -20,7 +20,7 @@ Volley 的中文翻译为“齐射、并发”，是在 2013 年的 Google 大�
 > * Volley 不适合用来下载大的数据文件。因为 Volley 会保持在解析的过程中所有的响应。对于下载大量的数据操作，请考虑使用 DownloadManager 。
 > * 在 volley 推出之前我们一般会选择比较成熟的第三方网络通信库，如：android-async-http、retrofit、okhttp 等。他们各有优劣，可有所斟酌地选择选择更适合项目的类库。
 > * 附：
-Volley 的 github 地址：https://github.com/mcxiaoke/android-volley
+Volley 的 GitHub 地址：https://github.com/mcxiaoke/android-volley
 
 ## 二、使用
 
@@ -81,7 +81,7 @@ Volley 的 github 地址：https://github.com/mcxiaoke/android-volley
 
 ### 2.2 创建 XXXRequest 对象并添加到请求队列中
 
-Volley提供了`JsonObjectRequest`、`JsonArrayRequest`、`StringRequest`等 Request 形式
+Volley 提供了`JsonObjectRequest`、`JsonArrayRequest`、`StringRequest`等 Request 形式
 
 ### 2.3 把 XXXRequest 对象添加到 RequestQueue 中，开始执行网络请求。
 
