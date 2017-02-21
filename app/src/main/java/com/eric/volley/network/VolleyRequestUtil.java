@@ -42,7 +42,7 @@ public class VolleyRequestUtil {
         // 将当前请求添加到请求队列中
         MyApplication.getQueue().add(stringRequest);
         // 重启当前请求队列
-        MyApplication.getQueue().start();
+        //MyApplication.getQueue().start();
     }
 
     /**
@@ -72,6 +72,6 @@ public class VolleyRequestUtil {
         // 将当前请求添加到请求队列中
         MyApplication.getQueue().add(stringRequest);
         // 重启当前请求队列
-        MyApplication.getQueue().start();
+        //MyApplication.getQueue().start();
     }
 }
