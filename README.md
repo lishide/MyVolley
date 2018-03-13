@@ -26,20 +26,24 @@ Volley 的 GitHub 地址：https://github.com/mcxiaoke/android-volley
 
  - Eclipse
 
-        把 Volley 添加到项目中最简便的方法是 Clone 仓库，然后把它设置为一个 library project。
-        （1）clone 代码：
-        git clone https://android.googlesource.com/platform/frameworks/volley
-        
-        （2）将代码编译成 jar 包：
-        android update project -p . ant jar
-        
-        如无意外，将获得 volley.jar 包。
-        
-        （3）添加 volley.jar 到你的项目中
+``` bash
+把 Volley 添加到项目中最简便的方法是 Clone 仓库，然后把它设置为一个 library project。
+（1）clone 代码：
+git clone https://android.googlesource.com/platform/frameworks/volley
+
+（2）将代码编译成 jar 包：
+android update project -p . ant jar
+
+如无意外，将获得 volley.jar 包。
+
+（3）添加 volley.jar 到你的项目中
+```
 
  - AndroidStudio using Gradle build add dependent (recommended)
 
-        compile 'com.mcxiaoke.volley:library:1.0.19'
+``` groovy
+compile 'com.mcxiaoke.volley:library:1.0.19'
+```
 
 ----------
 
@@ -52,32 +56,36 @@ Volley 的 GitHub 地址：https://github.com/mcxiaoke/android-volley
 
 一般而言，网络请求队列都是整个 App 内使用的全局性对象，因此最好写入 Application 类中：
 
-    public class MyApplication extends Application{
-        // 建立请求队列
-        public static RequestQueue queue;
+``` java
+public class MyApplication extends Application{
+    // 建立请求队列
+    public static RequestQueue queue;
 
-       @Override
-       public void onCreate() {
-           super.onCreate();
-           queue = Volley.newRequestQueue(getApplicationContext());
-       }
-    
-       public static RequestQueue getHttpQueue() {
-          return queue;
-       }
-    }
+   @Override
+   public void onCreate() {
+       super.onCreate();
+       queue = Volley.newRequestQueue(getApplicationContext());
+   }
+
+   public static RequestQueue getHttpQueue() {
+      return queue;
+   }
+}
+```
 
 修改 AndroidManifest.xml 文件，使 App 的 Application 对象为我们刚定义的 MyApplication，并添加 INTERNET 权限：
 
-    <uses-permission android:name="android.permission.INTERNET" />
-    <application
-        android:name=".MyApplication"
-        android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
-        android:supportsRtl="true"
-        android:theme="@style/AppTheme" >
-    </application>
+``` xml
+<uses-permission android:name="android.permission.INTERNET" />
+<application
+    android:name=".MyApplication"
+    android:allowBackup="true"
+    android:icon="@mipmap/ic_launcher"
+    android:label="@string/app_name"
+    android:supportsRtl="true"
+    android:theme="@style/AppTheme" >
+</application>
+```
 
 ### 2.2 创建 XXXRequest 对象并添加到请求队列中
 
@@ -85,31 +93,37 @@ Volley 提供了`JsonObjectRequest`、`JsonArrayRequest`、`StringRequest`等 Re
 
 ### 2.3 把 XXXRequest 对象添加到 RequestQueue 中，开始执行网络请求。
 
-        // 设置该请求的标签
-        request.setTag("listGet");
-        
-        // 将请求添加到队列中
-        MyApplication.getHttpQueue().add(request);
+``` java
+// 设置该请求的标签
+request.setTag("listGet");
+
+// 将请求添加到队列中
+MyApplication.getHttpQueue().add(request);
+```
 
 ### 2.4 关闭请求
 
 #### 关闭特定标签的网络请求：
 
-        // 网络请求标签为"listGet"
-        public void onStop() {
-            super.onStop();
-            MyApplication.getHttpQueues.cancelAll("listGet");
-        }
+``` java
+// 网络请求标签为"listGet"
+public void onStop() {
+    super.onStop();
+    MyApplication.getHttpQueues.cancelAll("listGet");
+}
+```
 
 #### 取消这个队列里的所有请求：
 
 在 activity 的 onStop() 方法里面，取消所有的包含这个 tag 的请求任务。
         
-        @Override  
-        protected void onStop() {  
-            super.onStop();  
-            mRequestQueue.cancelAll(this);  
-        }
+``` java
+@Override
+protected void onStop() {
+    super.onStop();
+    mRequestQueue.cancelAll(this);
+}
+```
 
 对 Volley 的 GET 和 POST 请求进行了封装，见 `VolleyRequestUtil.java` 和 `VolleyListenerInterface.java` 。你在使用过程中也可以添加相应的参数，完成自己所要实现的功能。
 
@@ -117,92 +131,98 @@ Volley 提供了`JsonObjectRequest`、`JsonArrayRequest`、`StringRequest`等 Re
 
  - **用 GET 方式请求网络资源：**
 
-        VolleyRequestUtil.RequestGet(this, url, "tag", 
-            new VolleyListenerInterface(this, VolleyListenerInterface.mListener,
-                    VolleyListenerInterface.mErrorListener) {
-            // Volley请求成功时调用的函数
-            @Override
-            public void onMySuccess(String result) {
-                Toast.makeText(this, s, Toast.LENGTH_LONG).show();
-            }
-        
-            // Volley请求失败时调用的函数
-            @Override
-            public void onMyError(VolleyError error) {
-                // ...
-            }
-        });
+``` java
+VolleyRequestUtil.RequestGet(this, url, "tag", 
+    new VolleyListenerInterface(this, VolleyListenerInterface.mListener,
+            VolleyListenerInterface.mErrorListener) {
+    // Volley请求成功时调用的函数
+    @Override
+    public void onMySuccess(String result) {
+        Toast.makeText(this, s, Toast.LENGTH_LONG).show();
+    }
+
+    // Volley请求失败时调用的函数
+    @Override
+    public void onMyError(VolleyError error) {
+        // ...
+    }
+});
+```
         
  - **用 POST 方式请求网络资源：**
 
-        VolleyRequestUtil.RequestPOST(this, url, "tag", 
-            new VolleyListenerInterface(this, VolleyListenerInterface.mListener,
-                    VolleyListenerInterface.mErrorListener) {
-            // Volley请求成功时调用的函数
-            @Override
-            public void onMySuccess(String result) {
-                Toast.makeText(MainActivity.this, result, Toast.LENGTH_LONG).show();
-            }
-        
-            // Volley请求失败时调用的函数
-            @Override
-            public void onMyError(VolleyError error) {
-                // ...
-            }
-        });
+``` java
+VolleyRequestUtil.RequestPOST(this, url, "tag", 
+    new VolleyListenerInterface(this, VolleyListenerInterface.mListener,
+            VolleyListenerInterface.mErrorListener) {
+    // Volley请求成功时调用的函数
+    @Override
+    public void onMySuccess(String result) {
+        Toast.makeText(MainActivity.this, result, Toast.LENGTH_LONG).show();
+    }
+
+    // Volley请求失败时调用的函数
+    @Override
+    public void onMyError(VolleyError error) {
+        // ...
+    }
+});
+```
 
 ## 四、PostUploadRequest 的使用
 
 用于上传文件的框架，封装于 Volley。
 
-        /**
-         * 上传文件分两步：
-         * 1.调用此工具类，将文件传输到服务器（从本地选择文件的过程未列出）
-         * 2.调用修改文件名的接口，修改数据库中相应的字段，完成上传文件操作
-         */
-        private void uploadFile() {
-            String upLoadServerUri = "";
-            HashMap<String, String[]> map = new HashMap<>();
-            map.put("uploadedfile", new String[]{filename, cutnameString});
-            MyApplication.getQueue().add(new PostUploadRequest(upLoadServerUri,
-                    map, new Response.Listener<JSONObject>() {
+``` java
+/**
+ * 上传文件分两步：
+ * 1.调用此工具类，将文件传输到服务器（从本地选择文件的过程未列出）
+ * 2.调用修改文件名的接口，修改数据库中相应的字段，完成上传文件操作
+ */
+private void uploadFile() {
+    String upLoadServerUri = "";
+    HashMap<String, String[]> map = new HashMap<>();
+    map.put("uploadedfile", new String[]{filename, cutnameString});
+    MyApplication.getQueue().add(new PostUploadRequest(upLoadServerUri,
+            map, new Response.Listener<JSONObject>() {
+        @Override
+        public void onResponse(JSONObject jsonObject) {
+            updatePic();
+        }
+    }, new Response.ErrorListener() {
+        @Override
+        public void onErrorResponse(VolleyError volleyError) {
+            Toast.makeText(mContext, "文件上传失败", Toast.LENGTH_SHORT).show();
+        }
+    }) {
+        @Override
+        protected Map<String, String> getParams() throws AuthFailureError {
+            HashMap<String, String> map = new HashMap<String, String>();
+                //map.put("token", "");
+            return map;
+        }
+    });
+}
+
+private void updatePic() {
+    Map<String, String> params = new HashMap<>();
+    params.put("id", "1");
+    params.put("pic", cutnameString);
+    VolleyRequestUtil.RequestPost(this, url, "tag", params,
+            new VolleyListenerInterface(this, VolleyListenerInterface.mListener,
+                    VolleyListenerInterface.mErrorListener) {
+                // Volley请求成功时调用的函数
                 @Override
-                public void onResponse(JSONObject jsonObject) {
-                    updatePic();
+                public void onMySuccess(String response) {
+
                 }
-            }, new Response.ErrorListener() {
+                // Volley请求失败时调用的函数
                 @Override
-                public void onErrorResponse(VolleyError volleyError) {
-                    Toast.makeText(mContext, "文件上传失败", Toast.LENGTH_SHORT).show();
-                }
-            }) {
-                @Override
-                protected Map<String, String> getParams() throws AuthFailureError {
-                    HashMap<String, String> map = new HashMap<String, String>();
-                        //map.put("token", "");
-                    return map;
+                public void onMyError(VolleyError error) {
+
                 }
             });
-        }
-        
-        private void updatePic() {
-            Map<String, String> params = new HashMap<>();
-            params.put("id", "1");
-            params.put("pic", cutnameString);
-            VolleyRequestUtil.RequestPost(this, url, "tag", params,
-                    new VolleyListenerInterface(this, VolleyListenerInterface.mListener,
-                            VolleyListenerInterface.mErrorListener) {
-                        // Volley请求成功时调用的函数
-                        @Override
-                        public void onMySuccess(String response) {
-                        
-                        }
-                        // Volley请求失败时调用的函数
-                        @Override
-                        public void onMyError(VolleyError error) {
-        
-                        }
-                    });
-        }
+}
+```
 
 **Volley 也提供了图片的缓存和优化，（ `com.android.volley.toolbox.NetworkImageView`） 自定义图片控件，本人在开发中未使用。该 Volley 的封装中，暂未考虑到图片和数据缓存。有一些地方封装得仍不够抽象，有待完善。非常欢迎各位能提出修改建议，一起进步！**
